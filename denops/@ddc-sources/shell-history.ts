@@ -8,6 +8,9 @@ type Params = {
 };
 
 export class Source extends BaseSource<Params> {
+  private readCount: number | null = null;
+  private wordSet: Set<string> | null = null;
+
   async gatherCandidates(): Promise<Candidate[]> {
     const histories = await this.getHistory();
     return this.allWords(histories).filter((word) => word.length < 50).map((
@@ -32,13 +35,31 @@ export class Source extends BaseSource<Params> {
       "-c",
       "history",
     ]);
-    return lines.map((line) => line.replace(/^\d+\s+/, ""));
+    const histories = lines.map((line) => line.replace(/^\d+\s+/, ""));
+    if (this.readCount === null) {
+      this.readCount = histories.length;
+      return histories;
+    } else if (histories.length > this.readCount) {
+      const result = histories.slice(this.readCount);
+      this.readCount = histories.length;
+      console.log(result.length);
+      return result;
+    }
+    return [];
   }
 
   private allWords(lines: string[]): string[] {
     const words = lines
       .flatMap((line) => [...line.matchAll(/[-_\p{L}\d]+/gu)])
       .map((match) => match[0]);
-    return Array.from(new Set(words)); // remove duplication
+    if (this.wordSet) {
+      for (const word of words) {
+        this.wordSet.add(word);
+      }
+    } else {
+      this.wordSet = new Set(words);
+    }
+    console.log(words.length);
+    return Array.from(this.wordSet); // remove duplication
   }
 }
