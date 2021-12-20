@@ -42,7 +42,6 @@ export class Source extends BaseSource<Params> {
     } else if (histories.length > this.readCount) {
       const result = histories.slice(this.readCount);
       this.readCount = histories.length;
-      console.log(result.length);
       return result;
     }
     return [];
@@ -59,7 +58,6 @@ export class Source extends BaseSource<Params> {
     } else {
       this.wordSet = new Set(words);
     }
-    console.log(words.length);
     return Array.from(this.wordSet); // remove duplication
   }
 }
