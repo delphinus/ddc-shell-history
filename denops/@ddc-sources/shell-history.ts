@@ -13,9 +13,7 @@ export class Source extends BaseSource<Params> {
 
   async gatherCandidates(): Promise<Candidate[]> {
     const histories = await this.getHistory();
-    return this.allWords(histories).filter((word) => word.length < 50).map((
-      word,
-    ) => ({ word }));
+    return this.allWords(histories).map((word) => ({ word }));
   }
 
   params(): Params {

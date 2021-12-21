@@ -24,6 +24,10 @@ call ddc#custom#patch_global('sources', ['shell-history'])
 
 " Change source options
 call ddc#custom#patch_global('sourceOptions', {
-      \ 'shell-history': {'mark': 'S'},
+      \ 'shell-history': {
+      \   'mark': 'S',
+      \   'minKeywordLength': 4,
+      \   'maxKeywordLength': 50,
+      \ },
       \ })
 ```
