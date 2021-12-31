@@ -1,10 +1,8 @@
 # ddc-shell-history
 
-***This plugin is experimental.***
-
 Shell history completion for ddc.vim
 
-This source collects candidates from histories from your `$SHELL`.
+This source collects candidates from histories in your `$SHELL`.
 
 ## Required
 

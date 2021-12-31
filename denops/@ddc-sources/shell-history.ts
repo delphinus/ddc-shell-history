@@ -2,22 +2,29 @@ import {
   BaseSource,
   Candidate,
 } from "https://deno.land/x/ddc_vim@v1.2.0/types.ts#^";
+import {
+  GatherCandidatesArguments,
+} from "https://deno.land/x/ddc_vim@v1.2.0/base/source.ts#^";
 
 type Params = {
-  hoge?: string;
+  command: string[];
 };
 
 export class Source extends BaseSource<Params> {
   private readCount: number | null = null;
   private wordSet: Set<string> | null = null;
 
-  async gatherCandidates(): Promise<Candidate[]> {
-    const histories = await this.getHistory();
+  async gatherCandidates(
+    { sourceParams }: GatherCandidatesArguments<Params>,
+  ): Promise<Candidate[]> {
+    const histories = await this.getHistory(sourceParams.command);
     return this.allWords(histories).map((word) => ({ word }));
   }
 
   params(): Params {
-    return {};
+    return {
+      command: [Deno.env.get("SHELL") || "sh", "-c", "history"],
+    };
   }
 
   private async runCmd(cmd: string[]): Promise<string[]> {
@@ -27,12 +34,8 @@ export class Source extends BaseSource<Params> {
     return new TextDecoder().decode(out).split(/\n/);
   }
 
-  private async getHistory(): Promise<string[]> {
-    const lines = await this.runCmd([
-      Deno.env.get("SHELL") || "sh",
-      "-c",
-      "history",
-    ]);
+  private async getHistory(command: string[]): Promise<string[]> {
+    const lines = await this.runCmd(command);
     const histories = lines.map((line) => line.replace(/^\d+\s+/, ""));
     if (this.readCount === null) {
       this.readCount = histories.length;

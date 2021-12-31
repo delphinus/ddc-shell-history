@@ -1,0 +1,61 @@
+*ddc-shell-history.txt*	Shell history completion for ddc.vim
+
+Author: delphinus <me@delphinus.dev>
+License: MIT license
+
+CONTENTS					    *ddc-shell-history-contents*
+
+Introduction		|ddc-shell-history-introduction|
+Install			|ddc-shell-history-install|
+Examples		|ddc-shell-history-examples|
+Params			|ddc-shell-history-params|
+
+
+==============================================================================
+INTRODUCTION					*ddc-shell-history-introduction*
+
+This source collects candidates from histories in your shell.
+
+
+==============================================================================
+INSTALL						     *ddc-shell-history-install*
+
+Please install both "ddc.vim" and "denops.vim".
+
+https://github.com/Shougo/ddc.vim
+https://github.com/vim-denops/denops.vim
+
+This source can deal with bash, zsh, and fish.
+
+==============================================================================
+EXAMPLES					    *ddc-shell-history-examples*
+>
+	" Use shell-history source.
+	call ddc#custom#patch_global('sources', ['shell-history'])
+	
+	" Change source options
+	call ddc#custom#patch_global('sourceOptions', {
+	      \ 'tmux': {
+	      \   'mark': 'T',
+	      \   'minKeywordLength': 4,
+	      \   'maxKeywordLength': 50,
+	      \ },
+	      \ })
+
+	" You can set the command to get histories.
+	call ddc#custom#patch_global('sourceParams', {
+	      \ 'shell-history': {'command': ['zsh', '-c', 'history']},
+	      \ })
+
+==============================================================================
+PARAMS						      *ddc-shell-history-params*
+
+					       *ddc-shell-history-param-command*
+command		(string)
+		The command to get histories.
+
+		Default: [$SHELL, "-c", "history"]
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
